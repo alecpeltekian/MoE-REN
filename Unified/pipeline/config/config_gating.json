@@ -1,0 +1,70 @@
+{
+    "task": "has_ILD",
+    "expert_type": "cnn",
+    "num_experts": 2,
+    "expert_config": {
+        "2_experts": {
+            "expert_names": ["Left_Lung", "Right_Lung"],
+            "expert_indices": [5, 6],
+            "description": "Two lung-level experts"
+        },
+        "5_experts": {
+            "expert_names": ["Lobe_1_LUL", "Lobe_2_LLL", "Lobe_3_RUL", "Lobe_4_RML", "Lobe_5_RLL"],
+            "expert_indices": [0, 1, 2, 3, 4],
+            "description": "Five lobe-level experts"
+        },
+        "7_experts": {
+            "expert_names": ["Lobe_1_LUL", "Lobe_2_LLL", "Lobe_3_RUL", "Lobe_4_RML", "Lobe_5_RLL", "Left_Lung", "Right_Lung"],
+            "expert_indices": [0, 1, 2, 3, 4, 5, 6],
+            "description": "Five lobes + two lungs"
+        }
+    },
+    "data_paths": {
+        "nifti_dir": "/data2/akp4895/MultipliedImagesClean",
+        "lobe_masks_dir": "/data2/akp4895/1mm_OrientedImagesSegmented",
+        "labels_file": "/home/akp4895/MoE_MultiModal/Radiomics/data/labels.csv"
+    },
+    "training": {
+        "num_epochs": 50,
+        "batch_size": 4,
+        "learning_rate": 1e-4,
+        "early_stopping_patience": 10,
+        "weight_decay": 1e-5
+    },
+    "gating": {
+        "gating_results_dir": "/data2/akp4895/MoE_MultiModal/pipeline_gating_results/gating_results",
+        "gating_strategies": ["performance_based", "feature_based", "learned"]
+    },
+    "moe_training": {
+        "num_epochs": 50,
+        "batch_size": 4,
+        "learning_rate": 1e-4,
+        "early_stopping_patience": 10,
+        "weight_mode": "gating_fixed",
+        "weight_regularization": 0.01,
+        "diversity_regularization": 0.01,
+        "gating_regularization": 0.005
+    },
+    "output": {
+        "base_dir": "/data2/akp4895/MoE_MultiModal/pipeline_gating_results",
+        "expert_results_dir": "/data2/akp4895/MoE_MultiModal/pipeline_gating_results/expert_results",
+        "gating_results_dir": "/data2/akp4895/MoE_MultiModal/pipeline_gating_results/gating_results",
+        "moe_results_dir": "/data2/akp4895/MoE_MultiModal/pipeline_gating_results/gating_moe_results",
+        "unified_cnn_results": "/data2/akp4895/unified_cnn_results",
+        "unified_vit_results": "/data2/akp4895/unified_vit_results",
+        "unified_mamba_results": "/data2/akp4895/unified_mamba_results",
+        "unified_extracted_gating_results": "/data2/akp4895/unified_extracted_gating_results",
+        "unified_gating_moe_output": "/data2/akp4895/unified_gating_moe_output_five_lobes",
+        "extracted_gating_results": "/data2/akp4895/extracted_gating_results",
+        "mlp_expert_weights_results": "/data2/akp4895/mlp_expert_weights_results",
+        "vit_expert_weights_results": "/data2/akp4895/vit_expert_weights_results",
+        "mamba_expert_weights_results": "/data2/akp4895/mamba_expert_weights_results"
+    },
+    "gpu": "1",
+    "folds": [0, 1, 2, 3, 4],
+    "ensemble": {
+        "method": "weighted_average",
+        "weight_strategy": "val_auc"
+    }
+}
+

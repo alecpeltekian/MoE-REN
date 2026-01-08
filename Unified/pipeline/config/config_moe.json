@@ -1,0 +1,63 @@
+{
+    "task": "has_ILD",
+    "expert_type": "mamba",
+    "num_experts": 2,
+    "expert_config": {
+        "2_experts": {
+            "expert_names": ["Left_Lung", "Right_Lung"],
+            "expert_indices": [5, 6],
+            "description": "Two lung-level experts"
+        },
+        "5_experts": {
+            "expert_names": ["Lobe_1_LUL", "Lobe_2_LLL", "Lobe_3_RUL", "Lobe_4_RML", "Lobe_5_RLL"],
+            "expert_indices": [0, 1, 2, 3, 4],
+            "description": "Five lobe-level experts"
+        },
+        "7_experts": {
+            "expert_names": ["Lobe_1_LUL", "Lobe_2_LLL", "Lobe_3_RUL", "Lobe_4_RML", "Lobe_5_RLL", "Left_Lung", "Right_Lung"],
+            "expert_indices": [0, 1, 2, 3, 4, 5, 6],
+            "description": "Five lobes + two lungs"
+        }
+    },
+    "data_paths": {
+        "nifti_dir": "/data2/akp4895/MultipliedImagesClean",
+        "lobe_masks_dir": "/data2/akp4895/1mm_OrientedImagesSegmented",
+        "labels_file": "/home/akp4895/MoE_MultiModal/Radiomics/data/labels.csv"
+    },
+    "training": {
+        "num_epochs": 50,
+        "batch_size": 4,
+        "learning_rate": 1e-4,
+        "early_stopping_patience": 10,
+        "weight_decay": 1e-5
+    },
+    "moe_training": {
+        "num_epochs": 50,
+        "batch_size": 4,
+        "learning_rate": 1e-4,
+        "early_stopping_patience": 10,
+        "weight_mode": "learned_moe",
+        "weight_regularization": 0.01,
+        "diversity_regularization": 0.01
+    },
+    "output": {
+        "base_dir": "/data2/akp4895/MoE_MultiModal/pipeline_moe_results",
+        "expert_results_dir": "/data2/akp4895/MoE_MultiModal/pipeline_moe_results/expert_results",
+        "moe_results_dir": "/data2/akp4895/MoE_MultiModal/pipeline_moe_results/moe_results",
+        "unified_cnn_results": "/data2/akp4895/unified_cnn_results",
+        "unified_vit_results": "/data2/akp4895/unified_vit_results",
+        "unified_mamba_results": "/data2/akp4895/unified_mamba_results",
+        "swin_moe_cnn_experts_output": "/data2/akp4895/swin_moe_cnn_experts_output_five_lobes",
+        "swin_moe_vit_experts_output": "/data2/akp4895/swin_moe_vit_experts_output_five_lobes",
+        "swin_moe_mamba_experts_output": "/data2/akp4895/swin_moe_mamba_experts_output_five_lobes",
+        "unified_swin_moe_results": "/data2/akp4895/unified_swin_moe_results_five_lobes",
+        "unified_expert_results": "/data2/akp4895/unified_expert_results"
+    },
+    "gpu": "3",
+    "folds": [0, 1, 2, 3, 4],
+    "ensemble": {
+        "method": "weighted_average",
+        "weight_strategy": "val_auc"
+    }
+}
+

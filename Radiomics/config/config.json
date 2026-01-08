@@ -1,0 +1,54 @@
+{
+    "task": "has_ILD",
+    "num_experts": 5,
+    "expert_config": {
+        "2_experts": {
+            "expert_names": ["Left_Lung", "Right_Lung"],
+            "expert_indices": [5, 6],
+            "expert_types": ["lung", "lung"],
+            "description": "Two lung-level experts"
+        },
+        "5_experts": {
+            "expert_names": ["Lobe_1_LUL", "Lobe_2_LLL", "Lobe_3_RUL", "Lobe_4_RML", "Lobe_5_RLL"],
+            "expert_indices": [0, 1, 2, 3, 4],
+            "expert_types": ["lobe", "lobe", "lobe", "lobe", "lobe"],
+            "lobe_numbers": [1, 2, 3, 4, 5],
+            "description": "Five lobe-level experts"
+        },
+        "7_experts": {
+            "expert_names": ["Lobe_1_LUL", "Lobe_2_LLL", "Lobe_3_RUL", "Lobe_4_RML", "Lobe_5_RLL", "Left_Lung", "Right_Lung"],
+            "expert_indices": [0, 1, 2, 3, 4, 5, 6],
+            "expert_types": ["lobe", "lobe", "lobe", "lobe", "lobe", "lung", "lung"],
+            "lobe_numbers": [1, 2, 3, 4, 5, null, null],
+            "description": "Five lobes + two lungs"
+        }
+    },
+    "data_paths": {
+        "nifti_dir": "/data2/akp4895/MultipliedImagesClean",
+        "lobe_masks_dir": "/data2/akp4895/1mm_OrientedImagesSegmented",
+        "labels_file": "/home/akp4895/MoE_MultiModal/Radiomics/data/labels.csv",
+        "pyradiomics_config": "/home/akp4895/MoE_MultiModal/Radiomics_clean/config/params.yaml"
+    },
+    "output_paths": {
+        "radiomics_features_dir": "/data2/akp4895/MoE_MultiModal/pipeline_radiomics_results/radiomics_features",
+        "importance_results_dir": "/data2/akp4895/MoE_MultiModal/pipeline_radiomics_results/importance_results",
+        "model_results_dir": "/data2/akp4895/MoE_MultiModal/radiomicsresults"
+    },
+    "training": {
+        "gpu": "2",
+        "batch_size": 4,
+        "learning_rate": 4e-4,
+        "max_epochs": 50,
+        "patience": 10,
+        "weight_decay": 1e-5,
+        "num_classes": 2,
+        "feature_size": 48,
+        "img_size": [96, 96, 96]
+    },
+    "extraction": {
+        "batch_size": 10,
+        "resume": true
+    },
+    "folds": [0, 1, 2, 3, 4]
+}
+
